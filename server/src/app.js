@@ -3,6 +3,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import morgan from "morgan"
 import helmet from "helmet"
+import { userRouter } from "./routes/user.route.js"
 
 const app = express()
 
@@ -17,5 +18,7 @@ app.use(morgan())
 app.use(helmet({
     crossOriginResourcePolicy : true
 }))
+
+app.use("/api/v1/user/",userRouter)
 
 export {app}
