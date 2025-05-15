@@ -5,6 +5,7 @@ import {asyncHandler} from "../utils/asyncHandler.js"
 import sendEmail from "../utils/sendEmail.js";
 import {verifyEmailTemplete} from "../utils/verifyEmailTemplete.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
+import uploadImageClodinary from "../utils/cloudinary.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
     const user = await UserModel.findById(userId)
@@ -114,7 +115,7 @@ const loginUserController = asyncHandler(async (req,res) => {
 })
 
 const logoutUserController = asyncHandler(async (req,res) => {
-    await UserModel.findByIdAndUpdate(userId,{
+    await UserModel.findByIdAndUpdate(req.user?._id,{
         $unset : {refresh_token:1}
     },{new : true})
 
@@ -131,4 +132,20 @@ const logoutUserController = asyncHandler(async (req,res) => {
     .json(new ApiResponse(201,{},"Logout Successfully"))
 })
 
-export {registerUserController,loginUserController,verifyEmailController}
+const updateUserAvatar = asyncHandler (async ( req,res ) => {
+    
+    const image =  await uploadImageClodinary(req.file)
+    if(!image){
+        throw new ApiError(401,"Unable to Upload Image")
+    }
+    await UserModel.findByIdAndUpdate(req.user?._id,{
+        avatar: image.url
+    })
+
+    return res 
+    .status(200)
+    .json(new ApiResponse(200,{_id : req.user?._id,avatar : image.url}))
+
+})
+
+export {registerUserController,loginUserController,logoutUserController,verifyEmailController,updateUserAvatar}
