@@ -6,3 +6,15 @@
     --color-secondary-200 : #00b050;
     --color-secondary-100 : #0b1a78
 }
+
+@layer base {
+    button{
+        @apply cursor-pointer
+    }
+}
+
+@utility button {
+    cursor: pointer;
+}
+
+    
