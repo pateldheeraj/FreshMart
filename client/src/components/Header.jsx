@@ -16,7 +16,7 @@ export const Header = () => {
       navigate('/login')
     }
   return (
-    <header className='sticky top-0 h-24 lg:h-20 shadow-md flex flex-col justify-center gap-1'>
+    <header className=' bg-white sticky top-0 h-24 lg:h-20 shadow-md flex flex-col justify-center gap-1'>
         {!(isSearchPage && isMobile) && 
         (
         <div className='container flex items-center justify-between mx-auto  px-2'>
