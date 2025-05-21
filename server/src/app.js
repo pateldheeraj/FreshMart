@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import morgan from "morgan"
 import helmet from "helmet"
 import { userRouter } from "./routes/user.route.js"
+import errorHandler from "./middlewares/errorHandler.js"
 
 const app = express()
 
@@ -20,5 +21,6 @@ app.use(helmet({
 }))
 
 app.use("/api/v1/user/",userRouter)
+app.use(errorHandler);
 
 export {app}

@@ -8,14 +8,12 @@ import SummaryApi from '../common/SummaryApi';
 import AxiosToastError from '../utils/AxiosToastError';
 
 
-export const Login = () => {
+export const ForgotPassword = () => {
     const navigate = useNavigate()
     const [data,setData] = useState({
         email:"",
-        password:"",
     });
 
-    const [isShowPass,setIsShowPass] = useState(false) 
     const handleChange = (e) => {
         const {name,value} = e.target
      
@@ -33,7 +31,7 @@ export const Login = () => {
  
         try {
             const response = await Axios({
-                ...SummaryApi.login,
+                ...SummaryApi.forgot_password,
                 data : data
             })
             if(response.data.error){
@@ -41,11 +39,13 @@ export const Login = () => {
             }
             if(response.data.success){
                 toast.success(response.data.message)
+                navigate('/verification-otp',{
+                    state:data
+                })
                 setData({
                     email:"",
-                    password:"",
                 })
-                navigate('/')
+                
             }
             console.log(response);
         } catch (error) {
@@ -56,7 +56,7 @@ export const Login = () => {
   return (
     <section className='w-full container mx-auto px-2'>
         <div className='bg-white my-4 w-full max-w-lg mx-auto rounded p-4'>
-            {/* <p>Welcome to FreshMart</p> */}
+            <p className='font-semibold  text-lg'>Forgot Password</p>
 
             <form className='grid gap-4 mt-6' onSubmit={handleSubmit}>
                 <div className=' grid gap-1'>
@@ -70,41 +70,12 @@ export const Login = () => {
                         className='bg-blue-50 p-2 border rounded outline-none focus:border-primary-200'
                     />
                 </div>
-                <div className=' grid gap-1'>
-                    <label htmlFor="name">Password :</label>
-                    <div className='flex items-center bg-blue-50 p-2 border rounded focus-within:border-primary-200 outline-none'>
-                        <input 
-                            type={!isShowPass ? "password" : "text"}
-                            id='password'
-                            name='password'
-                            value={data.password}
-                            onChange={handleChange}
-                            className=' w-full outline-none'
-                        />
-                        <div className=''>
-                            {   isShowPass ? 
-                                    <FaEye
-                                        className=' cursor-pointer '
-                                        onClick={()=>setIsShowPass(!isShowPass)}
-                                        size={18}
-                                    /> 
-                                    : 
-                                    <FaEyeSlash 
-                                        className=' cursor-pointer'
-                                        onClick={()=>setIsShowPass(!isShowPass)}
-                                        size={18}
-                                    />
-                            }
-                        </div>
-                    </div>
-                    <Link to={"/forgot-password"} className='ml-auto block hover:text-primary-200'>forgot password?</Link>
-                </div>
                 <button disabled={!valideValue} className={`${valideValue ? "bg-green-800 hover:bg-green-700" : "bg-gray-500" } rounded my-3 py-2 text-white font-semibold tracking-wide`}>
-                    Login
+                    Send Otp
                 </button>
             </form>
             <p>
-                Don't have an account ? <Link to={"/register"} className='font-semibold text-green-700 hover:text-green-800'>Register</Link>
+                Already have an account ? <Link to={"/login"} className='font-semibold text-green-700 hover:text-green-800'>Login</Link>
             </p>
         </div>
     </section>
