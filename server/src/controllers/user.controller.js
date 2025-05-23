@@ -8,6 +8,7 @@ import uploadImageClodinary from "../utils/cloudinary.js";
 import { generateOtp } from "../utils/generateOtp.js";
 import {forgotPassTemp} from "../utils/forgotPasswordEmailTemplate.js"
 import jwt from "jsonwebtoken"
+import { use } from "react";
 
 
 const generateAccessAndRefreshToken = async (userId) => {
@@ -103,6 +104,9 @@ const loginUserController = asyncHandler( async (req,res) => {
     const {accessToken,refreshToken} = await generateAccessAndRefreshToken(user?._id)
      console.log(accessToken,refreshToken);
  
+    const updateUser = await UserModel.findByIdAndUpdate(user._id,{
+        last_login_date : new Date()
+    })
     const options = {
         httpsOnly : true,
         secure : true,
@@ -120,7 +124,7 @@ const loginUserController = asyncHandler( async (req,res) => {
 const logoutUserController = asyncHandler( async (req,res) => {
     await UserModel.findByIdAndUpdate(req.user?._id,{
         $unset : {refresh_token:1}
-    },{new : true})
+    })
 
     const options = {
         httpsOnly : true,
