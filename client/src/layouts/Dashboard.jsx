@@ -1,5 +1,6 @@
 import React from 'react'
 import { UserMenu } from '../components/UserMenu'
+import { Profile } from '../pages/Profile'
 
 export const Dashboard = () => {
   return (
@@ -12,7 +13,7 @@ export const Dashboard = () => {
             {/* right for content */}
 
             <div className='bg-white p-4'>
-                ContentHere
+                <Profile/>
             </div>
         </div>
     </section>

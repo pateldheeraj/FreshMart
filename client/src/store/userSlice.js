@@ -46,10 +46,13 @@ const userSlice = createSlice({
             state.address_details = ""
             state.shopping_cart = ""
             state.orderHistory = ""
-    }
+        },
+        updatedAvatar :(state,action) => {
+            state.avatar = action.payload
+        },
 }
 })
 
- export const { setUserDetails,logout } = userSlice.actions
+ export const { setUserDetails,logout,updatedAvatar } = userSlice.actions
 
  export default userSlice.reducer
