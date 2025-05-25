@@ -1,0 +1,78 @@
+import React, { useState } from 'react'
+import { RxCross1 } from "react-icons/rx";
+
+export const CategoryUploadMenu = ({close}) => {
+    
+    const [data,setData] = useState({
+        name : "",
+        image : ""
+    })
+
+    const handleOnChange = (e) => {
+        const { name, value} = e.target
+        setData((prev) => {
+           return {
+             ...prev ,
+            [name] : value
+           }
+        })
+    }
+
+  return (
+    <section className='fixed top-0 bottom-0 left-0 p-4 right-0 bg-neutral-800 opacity-60 flex items-center justify-center'>
+       <div className='bg-white max-w-4xl w-full p-4 rounded'>
+            <div className='flex justify-between items-center'>
+                <h1 className='font-semibold'>Category</h1>
+                <button onClick={close} className='w-fit block ml-auto'>
+                    <RxCross1 size={15}
+                 /></button>
+            </div>
+            <form className='my-3 grid gap-2'>
+                <div className='grid gap-1'>
+                    <label id='uploadCategoryName'>Name</label>
+                    <input 
+                        type="text"
+                        name='name'
+                        id='uplaodCategoryName'
+                        onChange={handleOnChange}
+                        value={data.name}
+                        placeholder='Enter product name'
+                        className='bg-blue-50 p-2 border border-blue-100 focus-within:border-primary-200 outline-none rounded'
+                    />
+                </div>
+                <div className='grid gap-1'>
+                    <p>Image</p>
+                    <div className='flex gap-4 flex-col lg:flex-row items-center'>
+                        <div className='border bg-blue-50 h-36 w-full lg:w-36 flex items-center justify-center rounded'>
+                            {
+                                data.image? (
+                                    <img 
+                                    src={data.image} 
+                                    alt='category'
+                                    className='w-full h-full object-scale-down' 
+                                    />
+                                ) : (
+                                    <p className='text-sm text-neutral-500'>No Image</p>
+                                )
+                            }
+                        </div>
+                        <label htmlFor="uploadCategoryImage">
+                            <div  
+                            className={`${!data.name ? "bg-gray-300":"border-primary-200 hover:bg-primary-100" } px-4 py-2 rounded cursor-pointer border font-medium`}>Upload Image</div>
+                            <input disabled={!data.name}  type='file' id='uploadCategoryImage' className='hidden'/>
+                        </label>
+                        
+                    </div>
+                </div>
+                <button
+                    className={`
+                    ${data.name && data.image ? "bg-primary-200 hover:bg-primary-100" : "bg-gray-300 "}
+                    py-2    
+                    font-semibold 
+                    `}
+                >Add Category</button>
+            </form>
+       </div>
+    </section>
+  )
+}

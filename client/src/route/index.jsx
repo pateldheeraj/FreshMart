@@ -10,6 +10,10 @@ import { ResetPassword } from "../pages/ResetPassword.jsx";
 import { UserMenuMobile } from "../pages/UserMenuMobile.jsx";
 import { Dashboard } from "../layouts/Dashboard.jsx";
 import { Profile } from "../pages/Profile.jsx";
+import {Category} from '../pages/Category.jsx'
+import {SubCategory} from '../pages/SubCategory.jsx'
+import {Product} from '../pages/Product.jsx'
+import {UploadProduct} from '../pages/UploadProduct.jsx'
 
 const router = createBrowserRouter([
     {
@@ -55,7 +59,23 @@ const router = createBrowserRouter([
                     {
                         path : "profile",
                         element : <Profile/>
-                    }
+                    },
+                    {
+                        path : "category",
+                        element : <Category/>
+                    },
+                    {
+                        path : "subcategory",
+                        element : <SubCategory/>
+                    },
+                    {
+                        path : "product",
+                        element : <Product/>
+                    },
+                    {
+                        path : "upload-product",
+                        element : <UploadProduct/>
+                    },
                 ]
             },
         ]
