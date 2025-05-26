@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
 import { RxCross1 } from "react-icons/rx";
+import {uploadImage} from '../utils/uploadImage'
+import toast from 'react-hot-toast';
+import Axios from '../utils/Axios';
+import SummaryApi from '../common/SummaryApi';
+import AxiosToastError from '../utils/AxiosToastError';
 
 export const CategoryUploadMenu = ({close}) => {
     
@@ -7,7 +12,7 @@ export const CategoryUploadMenu = ({close}) => {
         name : "",
         image : ""
     })
-
+    const [loading,setLoading] = useState(true)
     const handleOnChange = (e) => {
         const { name, value} = e.target
         setData((prev) => {
@@ -16,6 +21,51 @@ export const CategoryUploadMenu = ({close}) => {
             [name] : value
            }
         })
+    }
+
+    const handleSubmit = async(e) => {
+        e.preventDefault()
+        try {
+            setLoading(true)
+            const cateResponse = await Axios({
+                ...SummaryApi.addCategory,
+                data : data
+            }) 
+
+            const {data : CategoryRes} = cateResponse
+
+            if (CategoryRes.success) {
+                toast.success(CategoryRes.message)
+                close()
+            }
+
+        } catch (error) {
+            AxiosToastError(error)
+        }finally{
+            setLoading(false)
+        }
+    }
+
+    const handleUploadCategory = async(e) => {
+        const file = e.target.files[0]
+        if(!file){
+            return
+        }
+
+        const uploadedImage =  await uploadImage(file)
+
+        const {data : imageResponse } = uploadedImage
+        console.log(imageResponse);
+        
+        
+        setData((prev)=> {
+            return{
+                ...prev,
+                image : imageResponse.data.url
+            }
+        })
+        
+
     }
 
   return (
@@ -27,7 +77,7 @@ export const CategoryUploadMenu = ({close}) => {
                     <RxCross1 size={15}
                  /></button>
             </div>
-            <form className='my-3 grid gap-2'>
+            <form className='my-3 grid gap-2' onSubmit={handleSubmit}>
                 <div className='grid gap-1'>
                     <label id='uploadCategoryName'>Name</label>
                     <input 
@@ -58,8 +108,16 @@ export const CategoryUploadMenu = ({close}) => {
                         </div>
                         <label htmlFor="uploadCategoryImage">
                             <div  
-                            className={`${!data.name ? "bg-gray-300":"border-primary-200 hover:bg-primary-100" } px-4 py-2 rounded cursor-pointer border font-medium`}>Upload Image</div>
-                            <input disabled={!data.name}  type='file' id='uploadCategoryImage' className='hidden'/>
+                            className={`${!data.name ? "bg-gray-300":"border-primary-200 hover:bg-primary-100" } px-4 py-2 rounded cursor-pointer border font-medium`}>
+                                Upload Image
+                            </div>
+                            <input 
+                                disabled={!data.name}  
+                                onChange={handleUploadCategory} 
+                                type='file' 
+                                id='uploadCategoryImage'
+                                className='hidden'
+                            />
                         </label>
                         
                     </div>

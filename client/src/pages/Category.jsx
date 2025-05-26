@@ -3,6 +3,7 @@ import { CategoryUploadMenu } from '../components/CategoryUploadMenu'
 
 export const Category = () => {
   const [isCategoryUploadMenu,setCategoryUploadMenu] = useState(false)
+  
   return (
     <section>
       <div className='p-2   bg-white shadow-md flex items-center justify-between'>
