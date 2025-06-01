@@ -76,6 +76,9 @@ export const Category = () => {
       }
     }
 
+  useEffect(()=>{
+    fetchData()
+  },[])
   return (
     <section className=''>
       <div className='p-2   bg-white shadow-md flex items-center justify-between'>

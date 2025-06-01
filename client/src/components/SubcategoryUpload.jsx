@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { RxCross1 } from "react-icons/rx"
 import { uploadImage } from "../utils/uploadImage"
 import { useSelector } from "react-redux"
@@ -6,6 +6,7 @@ import Axios from "../utils/Axios"
 import SummaryApi from "../common/SummaryApi"
 import axios from "axios"
 import AxiosToastError from "../utils/AxiosToastError"
+import toast from "react-hot-toast"
 
 export const SubcategoryUpload = ({close}) => {
 
@@ -51,34 +52,44 @@ export const SubcategoryUpload = ({close}) => {
 
     const handleSelectedCategoryRemove = (categoryId)=>{
         const index = data.category.findIndex(el => el._id === categoryId )
-        data.category.splice(index,1)
-        setData((preve)=>{
-            return{
-                ...preve
-            }
-        })
-    }
+        console.log("index",index);
+        
+        setData((prev) => ({
+         ...prev,
+         category: prev.category.filter(cat => cat._id !== categoryId)
+        }));
 
+    }
+    
     const handleSubmit = async (e) => {
         e.preventDefault()
+  
         try {
+            const payload = {
+                name: data.name,
+                image: data.image,
+                categoryId: data.category.map(cat => cat._id)
+            }
+                   console.log(payload);
             const response = await Axios({
                 ...SummaryApi.addSubCategory,
-                data : data
+                data : payload
+                
             })
             const {data : responseData} = response
 
             if(responseData.success){
-                axios.success(responseData.message)
+                toast.success(responseData.message)
+
             }
             if(close){
-                    close()
+                 close()
              }
         } catch (error) {
             AxiosToastError(error)
         }
     }
-
+ 
   return (
     <section className="fixed top-0 bottom-0 left-0 right-0 bg-neutral-800/60 flex items-center justify-center p-4">
         <div className="bg-white p-4 w-full rounded max-w-5xl ">
@@ -143,12 +154,12 @@ export const SubcategoryUpload = ({close}) => {
                             {
                                 data.category.map((category,index)=> {
                                     return (
-                                        <p key={category._id+"selectedValue"} className='bg-white shadow-md px-1 m-1 flex items-center gap-2'>
+                                        <div key={category._id+"selectedValue"} className='bg-white shadow-md px-1 m-1 flex items-center gap-2'>
                                             {category.name}
                                             <p className="cursor-pointer hover:text-red-500" onClick={()=>handleSelectedCategoryRemove(category._id)}>
                                                 <RxCross1 size={20}/> 
                                             </p>
-                                        </p>
+                                        </div>
                                     )
                                 })
                             }
@@ -159,15 +170,19 @@ export const SubcategoryUpload = ({close}) => {
                                 onChange={(e)=>{
                                     const value = e.target.value
                                     const categoryDetails = allCategory.find((el)=>el._id == value)
+                                    console.log("cateegotrydess",categoryDetails);
+                                    
+                                    if (!categoryDetails || data.category.some(cat => cat._id === categoryDetails._id)) return;
+                                    const clonedCategory = { ...categoryDetails };
                                     setData((prev)=>{
                                         return{
                                             ...prev,
-                                            category : [...prev.category , categoryDetails]
+                                            category : [...prev.category , clonedCategory]
                                         }
                                     })
                                 }}  
                             >
-                                <option value={""} disabled>Select Category</option>
+                                <option value={""} >Select Category</option>
                                 {
                                     allCategory.map((category,index)=>{
                                         return(
