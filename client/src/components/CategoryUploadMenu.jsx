@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { RxCross1 } from "react-icons/rx";
 import {uploadImage} from '../utils/uploadImage'
 import toast from 'react-hot-toast';
@@ -6,13 +6,13 @@ import Axios from '../utils/Axios';
 import SummaryApi from '../common/SummaryApi';
 import AxiosToastError from '../utils/AxiosToastError';
 
-export const CategoryUploadMenu = ({close}) => {
+export const CategoryUploadMenu = ({close,fetchCategory}) => {
     
     const [data,setData] = useState({
         name : "",
         image : ""
     })
-    const [loading,setLoading] = useState(true)
+    const [loading,setLoading] = useState(false)
     const handleOnChange = (e) => {
         const { name, value} = e.target
         setData((prev) => {
@@ -37,6 +37,7 @@ export const CategoryUploadMenu = ({close}) => {
             if (CategoryRes.success) {
                 toast.success(CategoryRes.message)
                 close()
+                fetchCategory()
             }
 
         } catch (error) {
@@ -69,7 +70,7 @@ export const CategoryUploadMenu = ({close}) => {
     }
 
   return (
-    <section className='fixed top-0 bottom-0 left-0 p-4 right-0 bg-neutral-800 opacity-60 flex items-center justify-center'>
+    <section className='fixed top-0 bottom-0 left-0 p-4 right-0 bg-neutral-800/60 flex items-center justify-center'>
        <div className='bg-white max-w-4xl w-full p-4 rounded'>
             <div className='flex justify-between items-center'>
                 <h1 className='font-semibold'>Category</h1>

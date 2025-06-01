@@ -7,6 +7,7 @@ import { userRouter } from "./routes/user.route.js"
 import errorHandler from "./middlewares/errorHandler.js"
 import { categoryRouter } from "./routes/category.route.js"
 import { uploadRouter } from "./routes/upload.route.js"
+import { subCategoryRouter } from "./routes/subCategory.route.js"
 
 const app = express()
 
@@ -25,6 +26,7 @@ app.use(helmet({
 app.use("/api/v1/user/",userRouter)
 app.use("/api/v1/category/",categoryRouter)
 app.use("/api/v1/file/",uploadRouter)
+app.use("/api/v1/subcategory/",subCategoryRouter)
 app.use(errorHandler);
 
 export {app}
