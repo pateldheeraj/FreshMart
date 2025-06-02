@@ -68,7 +68,7 @@ export const SubcategoryUpload = ({close}) => {
             const payload = {
                 name: data.name,
                 image: data.image,
-                categoryId: data.category.map(cat => cat._id)
+                category: data.category
             }
                    console.log(payload);
             const response = await Axios({
