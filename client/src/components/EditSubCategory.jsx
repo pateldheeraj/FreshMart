@@ -4,18 +4,17 @@ import { uploadImage } from "../utils/uploadImage"
 import { useSelector } from "react-redux"
 import Axios from "../utils/Axios"
 import SummaryApi from "../common/SummaryApi"
-import axios from "axios"
 import AxiosToastError from "../utils/AxiosToastError"
 import toast from "react-hot-toast"
 
-export const SubcategoryUpload = ({close,fetchData}) => {
+export const EditSubCategory = ({close, data:subData ,fetchData}) => {
 
     const allCategory = useSelector((state)=>state.product.allCategory)
     
     const [data,setData] = useState({
-        name : "",
-        image : "",
-        category : []
+        name : subData.name,
+        image :subData.image,
+        category : subData.category
     })
 
     const handleChange = (e)=>{
@@ -38,10 +37,7 @@ export const SubcategoryUpload = ({close,fetchData}) => {
         const uploadedImage =  await uploadImage(file)
 
         const {data : imageResponse } = uploadedImage
-        console.log(imageResponse);
-        
-
-        
+     
         setData((prev)=> {
             return{
                 ...prev,
@@ -66,28 +62,27 @@ export const SubcategoryUpload = ({close,fetchData}) => {
   
         try {
             const payload = {
+                _id : subData._id,
                 name: data.name,
                 image: data.image,
                 category: data.category
             }
-                   console.log(payload);
             const response = await Axios({
-                ...SummaryApi.addSubCategory,
-                data : payload
+            ...SummaryApi.updateSubCategory,
+            data : payload
                 
             })
             const {data : responseData} = response
 
             if(responseData.success){
                 toast.success(responseData.message)
-
             }
             if(close){
                  close()
              }
-             if(fetchData){
+            if(fetchData){
                 fetchData()
-             }
+            }
         } catch (error) {
             AxiosToastError(error)
         }

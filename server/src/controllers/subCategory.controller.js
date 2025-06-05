@@ -43,4 +43,28 @@ const getSubCategoryController = asyncHandler(async (req, res) => {
   }
 });
 
-export {addSubCategoryController,getSubCategoryController}
+const updateSubCategoryController = asyncHandler(async (req,res) => {
+  const {_id,name,image,category} = req.body
+  const isSubCategory = await SubCateoryModel.findById(_id)
+  if(!isSubCategory){
+    throw new ApiError(400,"Check your Id")
+  }
+  const updateSubCategory = await SubCateoryModel.findByIdAndUpdate(_id,{
+    name,
+    image,
+    category
+  })
+  return res
+  .status(200)
+  .json(new ApiResponse(200,updateSubCategory,"SubCategory Updated Successfully"))
+})
+
+const deleteSubCategoryController = asyncHandler(async (req,res) => {
+  const {_id} = req.body
+  const deleteSubCat = await SubCateoryModel.findByIdAndDelete(_id) 
+  return res 
+  .status(200)
+  .json(new ApiResponse(200,deleteSubCat,"SubCategory Deleted Successfuly"))
+})
+
+export {addSubCategoryController,getSubCategoryController,updateSubCategoryController,deleteSubCategoryController}

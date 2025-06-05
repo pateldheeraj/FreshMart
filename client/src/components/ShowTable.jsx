@@ -32,7 +32,7 @@ const table = useReactTable({
             <tr key={row.id}>
                 <td className='border px-2 py-1'>{index+1}</td>
               {row.getVisibleCells().map(cell => (
-                <td key={cell.id} className='border px-2 py-1'>
+                <td key={cell.id} className='border px-2 py-1 whitespace-nowrap'>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
