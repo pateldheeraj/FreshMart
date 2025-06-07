@@ -8,7 +8,6 @@ import  EditCategory from '../components/EditCategory'
 import { ConfirmDelete } from '../components/ConfirmDelete'
 import toast from 'react-hot-toast'
 import AxiosToastError from '../utils/AxiosToastError'
-import { useSelector } from 'react-redux'
 
 export const Category = () => {
 
