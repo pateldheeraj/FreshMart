@@ -32,9 +32,7 @@ export const UserMenu = ({close}) => {
         } catch (error) {
             AxiosToastError(error)
         }
-    }
-    console.log(user.role);
-    
+    }   
   return (
    <div>
      <div className="font-semibold ">

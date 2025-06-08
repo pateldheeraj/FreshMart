@@ -54,7 +54,6 @@ export const Login = () => {
                 localStorage.setItem("refreshToken",response.data.data.refreshToken)
                 navigate('/')
             }
-            console.log(response);
         } catch (error) {
             AxiosToastError(error)
         }
