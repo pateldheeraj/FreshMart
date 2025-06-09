@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { uploadImage } from "../utils/uploadImage";
 import {Loading} from '../components/Loading'
@@ -7,7 +7,10 @@ import { MdDelete } from "react-icons/md";
 import {useSelector} from 'react-redux'
 import { IoClose } from "react-icons/io5";
 import { AddFieldComponent } from "../components/AddFieldComponent";
-
+import Axios from "../utils/Axios";
+import SummaryApi from "../common/SummaryApi";
+import AxiosToastError from "../utils/AxiosToastError"
+import successAlert from "../utils/SuccessAlert";
 
 export const UploadProduct = () => {
   
@@ -39,9 +42,6 @@ export const UploadProduct = () => {
   const allCategory = useSelector(state=>state.product.allCategory)
 
   const allSubCategory = useSelector(state=>state.product.allSubCategory)
-
-  console.log(allSubCategory);
-  
 
   const handleDeleteImage = (index) => {
     data.image.splice(index,1)
@@ -123,15 +123,49 @@ export const UploadProduct = () => {
     setOpenMoreFields("")
   }
 
+  const handleSubmit = async(e) =>{
+    e.preventDefault()
+    try {
+
+      const response = await Axios({
+        ...SummaryApi.createProduct,
+        data
+      })
+        
+      const {data: responseData} = response
+      
+
+      if(responseData.success){
+        successAlert(responseData.message)
+        setData({
+          name : "",
+          image : [],
+          category : [],
+          subCategory : [],
+          unit : "",
+          stock : "",
+          price : "",
+          discount : "",
+          description : "",
+          more_details : {},
+        })
+      }
+
+    } catch (error) {
+      AxiosToastError(error)
+    }
+    
+  }
+
   return (
     <section className=''>
       <div className='p-2   bg-white shadow-md flex items-center justify-between'>
         <h2 className='font-semibold'>Upload Product</h2>     
       </div>
       <div className="grid">
-        <form className="grid gap-2">
+        <form className="grid gap-4" onSubmit={handleSubmit}>
           <div className="grid gap-1">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name" className='font-medium' >Name</label>
             <input 
               id="name"
               type="text" 
@@ -144,7 +178,7 @@ export const UploadProduct = () => {
             />
           </div>
           <div className="grid gap-1">
-            <label htmlFor="name">Description</label>
+            <label className='font-medium' htmlFor="description">Description</label>
             <textarea 
               id="description"
               type="text" 
@@ -159,7 +193,7 @@ export const UploadProduct = () => {
             />
           </div>
           <div>
-            <p>Image</p>
+            <p className='font-medium'>Image</p>
             <div>
               <label id="productImage" className="bg-blue-50 h-24 border rounded flex justify-center items-center cursor-pointer">
                 <div className="flex items-center text-center justify-center flex-col">
@@ -203,7 +237,7 @@ export const UploadProduct = () => {
           </div>
           <div className="grid gap-1">
             <div>
-              <label>Category</label>
+              <label className='font-medium'>Category</label>
               <select 
                 className="bg-blue-50 p-2 border rounded w-full" 
                 value={selectedCategory}
@@ -223,7 +257,7 @@ export const UploadProduct = () => {
                 {
                   allCategory.map((c,index)=>{
                     return(
-                            <option value={c?._id}>{c.name}</option>
+                            <option key={c._id+index+'selectcategory'} value={c?._id}>{c.name}</option>
                           )
                   })
                 }
@@ -250,7 +284,7 @@ export const UploadProduct = () => {
           </div>
           <div className="grid gap-1">
             <div>
-              <label>SubCategory</label>
+              <label className='font-medium'>SubCategory</label>
               <select 
                 className="bg-blue-50 p-2 border rounded w-full" 
                 value={selectedSubCategory}
@@ -270,7 +304,7 @@ export const UploadProduct = () => {
                 {
                   allSubCategory.map((c,index)=>{
                     return(
-                            <option value={c?._id}>{c.name}</option>
+                            <option key={c._id+index+"selectSubCategory"} value={c?._id}>{c.name}</option>
                           )
                   })
                 }
@@ -296,7 +330,7 @@ export const UploadProduct = () => {
             </div>
           </div>
            <div className="grid gap-1">
-            <label htmlFor="unit">Unit</label>
+            <label className='font-medium' htmlFor="unit">Unit</label>
             <input 
               id="unit"
               type="text" 
@@ -309,7 +343,7 @@ export const UploadProduct = () => {
             />
           </div>
            <div className="grid gap-1">
-            <label htmlFor="stock">Number of Stock</label>
+            <label className='font-medium' htmlFor="stock">Number of Stock</label>
             <input 
               id="stock"
               type="text" 
@@ -322,7 +356,7 @@ export const UploadProduct = () => {
             />
           </div>
            <div className="grid gap-1">
-            <label htmlFor="price">Price</label>
+            <label className='font-medium' htmlFor="price">Price</label>
             <input 
               id="price"
               type="number" 
@@ -335,7 +369,7 @@ export const UploadProduct = () => {
             />
           </div>
            <div className="grid gap-1">
-            <label htmlFor="discount">Discount</label>
+            <label className='font-medium' htmlFor="discount">Discount</label>
             <input 
               id="discount"
               type="number" 
@@ -347,12 +381,47 @@ export const UploadProduct = () => {
               className="bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded "
             />
           </div>
+          {/* add more fields */}
+
+          {
+            Object?.keys(data?.more_details)?.map((k,index)=>{
+                return(
+                  <div key={index+k+"addmorefields"} className='grid gap-1'>
+                    <label htmlFor={k} className='font-medium'>{k}</label>
+                    <input 
+                      id={k}
+                      type='text'
+                      value={data?.more_details[k]}
+                      onChange={(e)=>{
+                          const value = e.target.value 
+                          setData((preve)=>{
+                            return{
+                                ...preve,
+                                more_details : {
+                                  ...preve.more_details,
+                                  [k] : value
+                                }
+                            }
+                          })
+                      }}
+                      required
+                      className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
+                    />
+                  </div>
+                )
+            })
+          }
+
+
           <div 
             onClick={()=>setOpenMoreFields(true)}
             className=" hover:bg-primary-200 bg-white py-1 px-3 w-32 text-center font-semibold border border-primary-200 hover:text-neutral-900 cursor-pointer rounded"
           >
             Add Fields
           </div>
+          <button className="bg-primary-100 rounded w-full p-2 hover:bg-primary-200 font-semibold">
+            Submit
+          </button>
         </form>
       </div>
       {

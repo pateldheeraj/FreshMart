@@ -5,7 +5,6 @@ const initialValue = {
     allSubCategory : [],
     allProduct : []
 }
-console.log(initialValue.allCategory);
 
 const productSlice = createSlice({
     name : "product",

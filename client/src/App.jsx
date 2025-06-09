@@ -43,8 +43,6 @@ function App() {
           ...SummaryApi.getSubCategory,
       })
       const { data : responseData } = response
-      console.log(responseData);
-      
       if (responseData.success) {
         dispatch(setAllSubCategory(responseData?.data))
       }

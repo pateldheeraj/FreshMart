@@ -9,11 +9,11 @@ const productSchema = new mongoose.Schema({
         type:Array,
         default:[]
     },
-    categoryId:[{
+    category:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Category"
     }],
-    subCategoryId:[{
+    subCategory:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"SubCategory"
     }],
@@ -47,6 +47,14 @@ const productSchema = new mongoose.Schema({
     }
 },{
     timestamps:true
+})
+
+productSchema.index({
+    name  : "text",
+    description : 'text'
+},{
+    name : 10,
+    description : 5
 })
 
 const ProductModel = mongoose.model("Product",productSchema)

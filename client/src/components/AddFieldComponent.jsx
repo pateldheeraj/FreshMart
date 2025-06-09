@@ -2,7 +2,7 @@ import { IoClose } from "react-icons/io5"
 
 export const AddFieldComponent = ({close,value,onChange,submit}) => {
   return (
-    <section className="fixed top-0 bottom-0 left-0 right-0 bg-neutral-900/70 z-50 flex items-center justify-center ">
+    <section className="fixed top-0 bottom-0 left-0 right-0 bg-neutral-900/70 z-50 flex items-center justify-center p-2 ">
         <div className="bg-white rounded p-4 w-full max-w-md ">
             <div className="flex justify-between">
                 <h1 className="font-semibold">Add Fields</h1>
@@ -18,7 +18,7 @@ export const AddFieldComponent = ({close,value,onChange,submit}) => {
                 className="bg-blue-50 p-2 border outline-none focus-within:border-primary-200 w-full my-3"
             />
             <button
-                onSubmit={submit}
+                onClick={submit}
                 className="bg-primary-200 px-4 py-2 rounded mx-auto w-fit block hover:bg-primary-100"
             >Add Field</button>
         </div>
