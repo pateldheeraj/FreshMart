@@ -13,6 +13,7 @@ import { ViewImage } from '../components/ViewImage'
 import {EditSubCategory} from '../components/EditSubCategory'
 import {ConfirmDelete} from '../components/ConfirmDelete'
 import toast from 'react-hot-toast'
+import { Loading } from '../components/Loading'
 
 export const SubCategory = () => {
   const [openSubcategoryUpload,setOpenSubcategoryUpload] = useState(false)
@@ -148,6 +149,10 @@ export const SubCategory = () => {
 
       {
         openEdit && <EditSubCategory fetchData={fetchSubCategory} data={editData} close={()=>setOpenEdit(false)}/>
+      }
+
+      {
+        loading && <Loading/>
       }
 
       {
