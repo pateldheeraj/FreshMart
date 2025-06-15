@@ -69,7 +69,24 @@ const getProductController = asyncHandler(async (req,res) => {
     .json(new ApiResponse(200,{data,totalCount,totalNoPage : Math.ceil( totalCount / limit)},"Product fetch Successfully"))
 })
 
+const getProductByCategoryController = asyncHandler(async (req,res) => {
+    const {id} = req.body
+    if(!id){
+        throw new ApiError(400,"Please Provide CategoryId")
+    }
+    const product = await ProductModel.find({
+        category : {
+            $in : id
+        }
+    }).limit(15)
+
+    return res 
+    .status(200)
+    .json(new ApiResponse(200,product,"Product FetchSuccessfully"))
+})
+
 export{
     createProductController,
-    getProductController
+    getProductController,
+    getProductByCategoryController
 }

@@ -1,11 +1,26 @@
 import banner from "../assets/banner.jpg"
 import bannerMobile from "../assets/banner-mobile.jpg"
 import {useSelector} from "react-redux"
+import { urlFilter } from "../utils/urlFilter"
+import { Link, useNavigate } from "react-router-dom"
+import { CategoryWiseProductDisplay } from "../components/CategoryWiseProductDisplay"
 
 const Home = () => {
 
   const loadingCategory = useSelector((state)=>state.product.loadingCategory) 
   const allCategory = useSelector((state)=>state.product.allCategory) 
+  const allSubCategory = useSelector((state)=>state.product.allSubCategory)
+  const navigate = useNavigate()
+
+  const handleRedirectProductListpage = (id,cat)=>{
+    const filterData = allSubCategory.find((subCat,i)=>{
+      const isCategory = subCat.category.some(el=>el._id == id)
+      return isCategory ? true : null
+     
+    })
+    const url = `/${urlFilter(cat)}-${id}/${urlFilter(filterData.name)}-${filterData._id}`
+    navigate(url)
+  }
 
   return (
     <section className="bg-white">
@@ -29,8 +44,8 @@ const Home = () => {
             loadingCategory ? (
               new Array(12).fill(null).map((c,index)=>{
                 return(
-                  <div className="bg-white rounded p-4 min-h-36 grid gap-2 shadow animate-pulse">
-                    <div key={index+"loadingcategory"} className="bg-blue-100 min-h-24 rounded"></div>
+                  <div key={index+"loadingcategory"} className="bg-white rounded p-4 min-h-36 grid gap-2 shadow animate-pulse">
+                    <div  className="bg-blue-100 min-h-24 rounded"></div>
                     <div className="bg-blue-100 h-8 rounded"></div>
                   </div>
                 )
@@ -55,6 +70,18 @@ const Home = () => {
             )
           }
         </div>
+
+        {/* display data by category */}
+
+        {
+          allCategory.map((cat,index)=>(
+            <CategoryWiseProductDisplay
+              key={index+"CategoryDisplay"}
+              id = {cat._id}
+              name = {cat.name}
+            />
+          ))
+        }    
 
       </div>
     </section>
