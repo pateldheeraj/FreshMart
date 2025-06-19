@@ -41,10 +41,10 @@ export const CategoryWiseProductDisplay = ({name,id}) => {
     const containerRef = useRef()
 
     const handleLeftScroll = () =>{
-        containerRef.current.scrollLeft += 200
+        containerRef.current.scrollLeft -= 200
     }
     const handleRightScroll = () =>{
-        containerRef.current.scrollLeft -= 200
+        containerRef.current.scrollLeft += 200
     }
 
   return (
@@ -54,7 +54,7 @@ export const CategoryWiseProductDisplay = ({name,id}) => {
             <Link to="" className="text-green-600 hover:text-green-400">See All</Link>
         </div>
          <div className='relative flex items-center '>
-            <div className="container mx-auto flex items-center gap-4 md:gap-6 lg:gap-8 px-4 overflow-hidden" ref={containerRef}>
+            <div className="container mx-auto flex  gap-4 md:gap-6 lg:gap-8 px-4 overflow-x-scroll lg:overflow-hidden scroll-smooth" ref={containerRef}>
             {   
                 loading &&
                 cardCountNumber.map((_,index)=>{

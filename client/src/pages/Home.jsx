@@ -2,7 +2,7 @@ import banner from "../assets/banner.jpg"
 import bannerMobile from "../assets/banner-mobile.jpg"
 import {useSelector} from "react-redux"
 import { urlFilter } from "../utils/urlFilter"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { CategoryWiseProductDisplay } from "../components/CategoryWiseProductDisplay"
 
 const Home = () => {
@@ -18,6 +18,8 @@ const Home = () => {
       return isCategory ? true : null
      
     })
+    console.log(filterData);
+    
     const url = `/${urlFilter(cat)}-${id}/${urlFilter(filterData.name)}-${filterData._id}`
     navigate(url)
   }

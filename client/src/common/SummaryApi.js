@@ -94,6 +94,14 @@ const SummaryApi = {
         url : "/api/v1/product/get-product-by-category",
         method : "post"
     },
+    getProductByCategoryAndSubCategoryId :{
+        url : "/api/v1/product/get-product-by-categoryId-subCategoryId",
+        method : "post"
+    },
+    getProductById :{
+        url : "/api/v1/product/get-product-by-id",
+        method : "post"
+    },
 }
 
 export default SummaryApi

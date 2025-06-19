@@ -16,7 +16,7 @@ import {Product} from '../pages/Product.jsx'
 import {UploadProduct} from '../pages/UploadProduct.jsx'
 import AdminPermision from "../components/AdminPermisson.jsx";
 import { ProductListPage } from "../pages/ProductListPage.jsx";
-import { DisplayProductPage } from "../components/DisplayProductPage.jsx";
+import { DisplayProductPage } from "../pages/DisplayProductPage.jsx";
 
 const router = createBrowserRouter([
     {

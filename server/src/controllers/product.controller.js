@@ -85,8 +85,66 @@ const getProductByCategoryController = asyncHandler(async (req,res) => {
     .json(new ApiResponse(200,product,"Product FetchSuccessfully"))
 })
 
+const getProductByCategoryIdAndSubcategoryIdController = asyncHandler(async (req,res) => {
+
+    const {categoryId , subCategoryId , page = 1,limit = 10} = req.body
+    
+    if(!categoryId || !subCategoryId){
+        throw new ApiError(400,"Please provide category and subcategory id")
+    }
+
+    const skip = (page-1)*limit
+
+    const [data,dataCount] = await Promise.all([
+        ProductModel.find({
+            category : {
+                $in : categoryId
+            },
+            subCategory : {
+                $in : subCategoryId
+            },
+        }).sort({createdAt : -1}).skip(skip).limit(limit)
+        ,
+        ProductModel.countDocuments({
+            category : {
+                $in : categoryId
+            },
+            subCategory : {
+                $in : subCategoryId
+            },
+        })
+    ])
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200,{
+        data ,
+        dataCount,
+        limit,
+        page
+    },"Product Fetch Successfully"))
+
+})
+
+const getproductDeatilsController = asyncHandler(async (req,res) => {
+    const {productId} = req.body
+    if(!productId){
+        throw new ApiError(400,"Product ID is Required")
+    }
+    const product = await ProductModel.find({_id : productId})
+    if(!product){
+        throw new ApiError(400,"Unbale to Fetch Product")
+    }
+
+    return res 
+    .status(200)
+    .json(new ApiResponse(200,product,"Product fetch Successfully"))
+})
+
 export{
     createProductController,
     getProductController,
-    getProductByCategoryController
+    getProductByCategoryController,
+    getProductByCategoryIdAndSubcategoryIdController,
+    getproductDeatilsController,
 }
