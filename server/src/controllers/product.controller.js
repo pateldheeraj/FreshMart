@@ -141,10 +141,40 @@ const getproductDeatilsController = asyncHandler(async (req,res) => {
     .json(new ApiResponse(200,product,"Product fetch Successfully"))
 })
 
+const editProductController = asyncHandler(async (req,res) => {
+    const {productId,dataPro} = req.body
+    
+    if (!productId) {
+        throw new ApiError(400,"Please provide product Id")
+    }
+    const product = await ProductModel.findByIdAndUpdate(productId,dataPro)
+    return res
+    .status(200)
+    .json(new ApiResponse(200,product,"Product Updated successfully"))
+})
+
+const deleteProductController = asyncHandler (async (req,res) => {
+    const {_id} = req.body
+    if(!_id){
+        throw new ApiError(400,"Provide Id")
+    }
+
+    await ProductModel.deleteOne({
+        _id : _id
+    })
+
+    return res 
+    .status(200)
+    .json(new ApiResponse(200,{}," Product Deleted Successfully" ))
+}) 
+
 export{
     createProductController,
     getProductController,
     getProductByCategoryController,
     getProductByCategoryIdAndSubcategoryIdController,
     getproductDeatilsController,
+    editProductController,
+    deleteProductController,
+
 }
