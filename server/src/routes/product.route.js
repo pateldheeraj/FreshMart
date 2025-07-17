@@ -1,6 +1,6 @@
 import {Router} from "express"
 import { verifyJWT } from "../middlewares/auth.middleware.js"
-import { createProductController, deleteProductController, editProductController, getProductByCategoryController, getProductByCategoryIdAndSubcategoryIdController, getProductController, getproductDeatilsController } from "../controllers/product.controller.js"
+import { createProductController, deleteProductController, editProductController, getProductByCategoryController, getProductByCategoryIdAndSubcategoryIdController, getProductController, getproductDeatilsController, searchProductController } from "../controllers/product.controller.js"
 
 const productRouter = Router()
 
@@ -11,6 +11,7 @@ productRouter.post('/get-product-by-categoryId-subCategoryId',getProductByCatego
 productRouter.post('/get-product-by-id',getproductDeatilsController)
 productRouter.put('/edit-product',editProductController)
 productRouter.delete('/delete-product',deleteProductController)
+productRouter.post('/search-product',searchProductController)
 
 
 export {productRouter}

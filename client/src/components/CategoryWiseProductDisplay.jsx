@@ -6,33 +6,51 @@ import SummaryApi from "../common/SummaryApi"
 import { CardLoading } from "./CardLoading"
 import { CardProduct } from "./CardProduct"
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { useSelector } from "react-redux"
+import { urlFilter } from "../utils/urlFilter"
 
 export const CategoryWiseProductDisplay = ({name,id}) => {
 
     const [data,setData] = useState([])
     const [loading,setLoading] = useState(false)
+    const allSubCategory = useSelector((state)=>state.product.allSubCategory)
 
-   const fetchProductByCategoryId = async() =>{
-    try { 
-        setLoading(true)
-        const response = await Axios({
-            ...SummaryApi.getProductByCategory,
-            data : {
-                id 
-            }
-        })
-        const {data : responseData} = response
-       if(responseData.success){
-        setData(responseData.data)
-       }
-        
-    } catch (error) {
-        AxiosToastError(error)
-    } finally{
-        setLoading(false)
+    const fetchProductByCategoryId = async() =>{
+        try { 
+            setLoading(true)
+            const response = await Axios({
+                ...SummaryApi.getProductByCategory,
+                data : {
+                    id 
+                }
+            })
+            const {data : responseData} = response
+        if(responseData.success){
+            setData(responseData.data)
+        }
+            
+        } catch (error) {
+            AxiosToastError(error)
+        } finally{
+            setLoading(false)
+        }
     }
-   }
 
+    const handleRedirectProductListpage = ()=>{
+        const filterData = allSubCategory.find((subCat,i)=>{
+            const isCategory = subCat.category.some(el=>el._id == id)
+            return isCategory ? true : null
+            
+        })
+        if (!filterData) {
+        console.warn(`No subcategory found for category id: ${id}`);
+        return "/";
+        }
+   
+        const url = `/${urlFilter(name)}-${id}/${urlFilter(filterData.name)}-${filterData._id}`
+        return url
+    }
+    
     useEffect(() => {
         fetchProductByCategoryId()
     },[])
@@ -46,12 +64,12 @@ export const CategoryWiseProductDisplay = ({name,id}) => {
     const handleRightScroll = () =>{
         containerRef.current.scrollLeft += 200
     }
-
+    const redirectURL = handleRedirectProductListpage()
   return (
     <div>
         <div className="flex justify-between items-center container mx-auto p-4 gap-4">        
             <h3 className="font-semibold text-lg md:text-xl">{name}</h3>
-            <Link to="" className="text-green-600 hover:text-green-400">See All</Link>
+            <Link  to={redirectURL} className="text-green-600 hover:text-green-400">See All</Link>
         </div>
          <div className='relative flex items-center '>
             <div className="container mx-auto flex  gap-4 md:gap-6 lg:gap-8 px-4 overflow-x-scroll lg:overflow-hidden scroll-smooth" ref={containerRef}>

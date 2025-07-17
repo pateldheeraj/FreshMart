@@ -137,8 +137,9 @@ export const EditProduct = ({close,data:productData,fetchProductData}) => {
       })
         
       const {data : responseData} = response
-
-      if(responseData.data){
+      console.log(responseData);
+      
+      if(responseData.success){
         toast.success(responseData.message)
         fetchProductData()
         close()

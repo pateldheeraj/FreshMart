@@ -168,6 +168,32 @@ const deleteProductController = asyncHandler (async (req,res) => {
     .json(new ApiResponse(200,{}," Product Deleted Successfully" ))
 }) 
 
+const searchProductController = asyncHandler(async (req,res) => {
+
+    let {search , page = 1 , limit = 10} = req.body
+    const query = search ? {
+            $text : {
+                $search : search
+            }
+        } : {}
+    const skip = (page-1) * limit
+    const [data,dataCounts] = await Promise.all([
+            ProductModel.find(query).sort({ createdAt  : -1 }).skip(skip).limit(limit).populate('category subCategory'),
+            ProductModel.countDocuments(query)
+        ])
+
+    return res 
+    .status(200)
+    .json(new ApiResponse(200,{
+        data : data,
+        dataCounts : dataCounts,
+        totalNoPage : Math.ceil(dataCounts/limit),
+        page : page,
+        limit : limit
+    }),"f")
+
+})
+
 export{
     createProductController,
     getProductController,
@@ -176,5 +202,5 @@ export{
     getproductDeatilsController,
     editProductController,
     deleteProductController,
-
+    searchProductController,
 }

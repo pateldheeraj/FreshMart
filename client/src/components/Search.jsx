@@ -9,7 +9,8 @@ export const Search = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const [isMobile] = useMobile()
-
+    const params = useLocation()
+    const searchText = params.search.slice(3)
     const [isSearchPage , setIsSearchPage] = useState(false)
     useEffect(()=>{
         const isSearch = location.pathname === "/search"
@@ -20,7 +21,11 @@ export const Search = () => {
     const redirectToSearchPage = () => {
       navigate("/search")
     }
-
+    const handleInputChange = (e)=>{
+      const value = e.target.value
+      const url = `/search?q=${value}`
+      navigate(url)
+    }
   return (
     <div  className=' w-full min-w-[300px] lg:min-w-[420px] h-11 lg:h-12 rounded-lg border overflow-hidden flex items-center text-neutral-500 bg-slate-50 group focus-within:border-primary-200'>
   
@@ -70,8 +75,9 @@ export const Search = () => {
                                       <input 
                                           type="text"
                                           placeholder="Search for atta dal and more."
-                                          autoFocus
+                                          value={searchText}
                                           className="bg-transparent w-full h-full outline-none "
+                                          onChange={handleInputChange}
                                       />
                                     )
                     }

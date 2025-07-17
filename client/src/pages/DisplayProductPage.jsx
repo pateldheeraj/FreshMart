@@ -10,6 +10,7 @@ import { Divider } from "../components/Divider"
 import image1 from "../assets/minute_delivery.png"
 import image2 from "../assets/best_prices_offers.png"
 import image3 from "../assets/Wide_Assortment.png"
+import { priceWithDiscount } from "../utils/priceWithDiscount"
 
 export const DisplayProductPage = () => {
 
@@ -112,7 +113,7 @@ export const DisplayProductPage = () => {
               </button>
             </div>
           </div>
-             <div>
+          <div>
           </div>
           <div className='my-4  hidden lg:grid gap-3 '>
                 <div>
@@ -143,14 +144,26 @@ export const DisplayProductPage = () => {
           <Divider/>
           <div>
             <p>Price</p>
-            <div className="border border-green-600 rounded px-4 py-2 bg-green-50 w-fit">
-              <p className="font-semibold text-lg lg:text-xl">{priceConverter(data.price)}</p>
+            <div className="flex gap-2 lg:gap-4 items-center">
+              <div className="border border-green-600 rounded px-4 py-2 bg-green-50 w-fit">
+               <p className="font-semibold text-lg lg:text-xl">{priceConverter(priceWithDiscount(data.price,data.discount))}</p>
+              </div>
+                {
+                  Boolean(data.discount) && (
+                    <p className="line-through">{priceConverter(data.price)}</p>
+                  )
+                }
+                {
+                  Boolean(data.discount) && (
+                    <p className="font-semibold text-green-600 lg:text-2xl ">{data.discount}% <span className="text-base text-neutral-500">Discount</span></p>
+                  )
+                }
             </div>
           </div>
 
           {
             data.stock == 0 ? (
-              <p className="font-semibold">Out Of Stock</p>
+              <p className="font-semibold text-red-500 my-2">Out Of Stock</p>
             ) : (
               <button className="my-4 px-4 py-1 bg-green-600 hover:bg-green-700 rounded text-white">Add</button>
             )
