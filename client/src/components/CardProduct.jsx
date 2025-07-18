@@ -1,12 +1,13 @@
-import React from 'react'
 import { priceConverter } from '../utils/priceConverterInRupees'
 import { Link } from 'react-router-dom'
 import { urlFilter } from '../utils/urlFilter'
 import { priceWithDiscount } from '../utils/priceWithDiscount'
+import AddToCartButton from './AddToCartButton'
 
 export const CardProduct = ({data}) => {
-    
+
     const url = `/product/${urlFilter(data?.name)}-${data?._id}`
+
   return (
     <Link to={url} className='border p-2 py-2 lg:p-4 min-w-36 lg:min-w-52 grid gap:1 lg:gap-3 rounded cursor-pointer bg-white'>
         <div className='min-h-20 w-full max-h-24 lg:max-h-32  rounded overflow-hidden'>
@@ -43,9 +44,7 @@ export const CardProduct = ({data}) => {
                     data?.stock == 0 ? (
                         <p className='text-red-500 text-sm text-center'>Out of Stock</p>
                     ) : (
-                        <button className='bg-green-600 rounded px-4 py-1 text-white hover:bg-green-800 w-full h-full'>
-                             Add
-                        </button>
+                        <AddToCartButton data={data}/>
                     )
                 }
             </div>

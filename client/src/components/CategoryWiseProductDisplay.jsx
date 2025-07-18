@@ -43,7 +43,6 @@ export const CategoryWiseProductDisplay = ({name,id}) => {
             
         })
         if (!filterData) {
-        console.warn(`No subcategory found for category id: ${id}`);
         return "/";
         }
    

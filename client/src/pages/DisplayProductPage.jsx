@@ -11,6 +11,7 @@ import image1 from "../assets/minute_delivery.png"
 import image2 from "../assets/best_prices_offers.png"
 import image3 from "../assets/Wide_Assortment.png"
 import { priceWithDiscount } from "../utils/priceWithDiscount"
+import AddToCartButton from "../components/AddToCartButton"
 
 export const DisplayProductPage = () => {
 
@@ -165,7 +166,10 @@ export const DisplayProductPage = () => {
             data.stock == 0 ? (
               <p className="font-semibold text-red-500 my-2">Out Of Stock</p>
             ) : (
-              <button className="my-4 px-4 py-1 bg-green-600 hover:bg-green-700 rounded text-white">Add</button>
+              // <button className="my-4 px-4 py-1 bg-green-600 hover:bg-green-700 rounded text-white">Add</button>
+              <div className="my-4">
+                <AddToCartButton data={data}/>
+              </div>
             )
           }    
            

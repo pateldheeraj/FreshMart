@@ -6,8 +6,9 @@ import { FaRegUserCircle } from "react-icons/fa";
 import useMobile from '../hooks/useMobile'
 import {useSelector} from 'react-redux'
 import { GoTriangleDown , GoTriangleUp} from "react-icons/go";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserMenu } from "./UserMenu";
+import { priceConverter } from "../utils/priceConverterInRupees";
 
 export const Header = () => {
 
@@ -17,6 +18,9 @@ export const Header = () => {
     const navigate = useNavigate()
     const user = useSelector((state) => state?.user)
     const [openUserMenu,setOpenUserMenu] = useState(false)
+    const [totalPrice,setTotalPrice] = useState(0)
+    const [totalQty,setTotalQty] = useState(0)
+    const cartItem = useSelector((state)=> state?.cartItem?.cart)
     
     const redirectToLoginPage = () => {
       navigate('/login')
@@ -33,7 +37,19 @@ export const Header = () => {
       }
       navigate('/user')
     }
+    useEffect(()=>{
+      const qty =cartItem.reduce((prev,curr)=>{
+        return prev + curr.quantity
+      },0)
+      setTotalQty(qty)
+      const tPrice = cartItem.reduce((prev,curr)=>{
+        return prev + (curr.productId.price + curr.quantity)
+      },0)
+      setTotalPrice(tPrice)
+      
+    },[cartItem])
 
+    
   return (
     <header className=' bg-white sticky top-0 h-24 lg:h-20 shadow-md flex flex-col justify-center gap-1'>
         {!(isSearchPage && isMobile) && 
@@ -105,12 +121,22 @@ export const Header = () => {
                             )
                           }
                           
-                          <button className="flex items-center gap-2 bg-green-800 hover:bg-green-700 px-3 py-3 rounded text-white">
+                          <button className="flex items-center gap-2 bg-green-800 hover:bg-green-700 px-3 py-2 rounded text-white">
                             <div className=" animate-bounce">
                                <BsCart4 size={25}/>
                             </div>
                             <div className=" font-semibold">
-                              <p>My cart</p>
+                              {
+                                cartItem[0] ?  (
+                                 <div>
+                                    <p>{totalQty} Items</p>
+                                    <p>{priceConverter(totalPrice)}</p>
+                                 </div>
+                                ) : (
+                                  <p>My cart</p>
+                                )
+                              }
+                              
                             </div>
                           </button>
                         </div>

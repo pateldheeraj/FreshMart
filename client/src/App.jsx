@@ -11,6 +11,8 @@ import { useDispatch } from 'react-redux'
 import SummaryApi from './common/SummaryApi'
 import Axios from './utils/Axios'
 import AxiosToastError from './utils/AxiosToastError'
+import { getCartItems } from './store/cartSlice'
+import GlobalProvider from './provider/GlobalProvider'
 
 function App() {
 
@@ -53,21 +55,23 @@ function App() {
     } 
   }
 
+
   useEffect(()=>{
      fetchUser()
      fetchCategory()
      fetchSubCategory()
+    //  fetchCartProduct()
   },[])
 
   return (
-    <>
+    <GlobalProvider>
         <Header/>
           <main className='min-h-[78vh]'>
                 <Outlet/>
           </main>
         <Footer/>
         <Toaster/>
-    </>
+    </GlobalProvider>
     
   )
 }
