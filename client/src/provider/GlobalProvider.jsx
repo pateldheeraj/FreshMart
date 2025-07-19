@@ -1,11 +1,11 @@
-import { createContext,useContext } from "react";
+import { createContext,useContext, useState } from "react";
 import Axios from "../utils/Axios";
 import SummaryApi from "../common/SummaryApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCartItems } from "../store/cartSlice";
 import { useEffect } from "react";
-import axios from "axios";
 import AxiosToastError from "../utils/AxiosToastError";
+import { priceWithDiscount } from "../utils/priceWithDiscount";
 
 const GlobalContext = createContext(null)
 
@@ -13,6 +13,10 @@ const useGlobalContext = ()=> useContext(GlobalContext)
 
 const GlobalProvider = ({children})=>{
     const dispatch = useDispatch()
+    const [totalPrice,setTotalPrice] = useState(0)
+    const [totalQty,setTotalQty] = useState(0)
+    const [notDiscountTotalPrice,setNotDiscountTotalPrice] = useState(0)
+    const cartItem = useSelector((state)=> state?.cartItem?.cart)
 
     const fetchCartProduct = async() => {
         try {
@@ -71,6 +75,23 @@ const GlobalProvider = ({children})=>{
     }
 
     useEffect(()=>{
+      const qty =cartItem.reduce((prev,curr)=>{
+        return prev + curr.quantity
+      },0)
+      setTotalQty(qty)
+      const tPrice = cartItem.reduce((prev, curr) => {
+        const discountedPrice = priceWithDiscount(curr.productId.price, curr.productId.discount);
+        return prev + (discountedPrice * curr.quantity);
+        }, 0);
+        setTotalPrice(tPrice);
+        
+        const notDiscountPrice = cartItem.reduce((prev,curr)=>{
+            return prev + (curr.productId.price * curr.quantity)
+        },0)
+      setNotDiscountTotalPrice(notDiscountPrice)
+    },[cartItem])
+
+    useEffect(()=>{
         fetchCartProduct()   
     },[])
 
@@ -78,7 +99,10 @@ const GlobalProvider = ({children})=>{
         <GlobalContext.Provider value={{
             fetchCartProduct,
             updateCartItem,
-            deleteCartItem
+            deleteCartItem,
+            totalPrice,
+            totalQty,
+            notDiscountTotalPrice
         }}>
             {children}
         </GlobalContext.Provider>

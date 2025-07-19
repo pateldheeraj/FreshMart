@@ -13,6 +13,7 @@ import Axios from './utils/Axios'
 import AxiosToastError from './utils/AxiosToastError'
 import { getCartItems } from './store/cartSlice'
 import GlobalProvider from './provider/GlobalProvider'
+import { MobileCart } from './components/MobileCart'
 
 function App() {
 
@@ -71,6 +72,7 @@ function App() {
           </main>
         <Footer/>
         <Toaster/>
+        <MobileCart/>
     </GlobalProvider>
     
   )
