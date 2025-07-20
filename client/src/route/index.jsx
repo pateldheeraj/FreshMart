@@ -18,6 +18,7 @@ import AdminPermision from "../components/AdminPermisson.jsx";
 import { ProductListPage } from "../pages/ProductListPage.jsx";
 import { DisplayProductPage } from "../pages/DisplayProductPage.jsx";
 import { CartMobile } from "../pages/CartMobile.jsx";
+import { CheckoutPage } from "../pages/CheckoutPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
             {
                 path : "cart",
                 element : <CartMobile/>
+            },
+            {
+                path : "checkout",
+                element : <CheckoutPage/>
             }
         ]
     }

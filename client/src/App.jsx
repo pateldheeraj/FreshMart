@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import './App.css'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
@@ -11,14 +11,15 @@ import { useDispatch } from 'react-redux'
 import SummaryApi from './common/SummaryApi'
 import Axios from './utils/Axios'
 import AxiosToastError from './utils/AxiosToastError'
-import { getCartItems } from './store/cartSlice'
 import GlobalProvider from './provider/GlobalProvider'
 import { MobileCart } from './components/MobileCart'
 
 function App() {
 
   const dispatch = useDispatch()
+  const location = useLocation()
 
+  
   const fetchUser = async () => {
     const userdata = await fetchUserDetails()
     dispatch(setUserDetails(userdata?.data)) 
@@ -61,7 +62,6 @@ function App() {
      fetchUser()
      fetchCategory()
      fetchSubCategory()
-    //  fetchCartProduct()
   },[])
 
   return (
@@ -72,7 +72,11 @@ function App() {
           </main>
         <Footer/>
         <Toaster/>
-        <MobileCart/>
+        {
+          location.pathname !== "/checkout" && (
+            <MobileCart/>
+          )
+        }
     </GlobalProvider>
     
   )
