@@ -137,7 +137,15 @@ const SummaryApi = {
    getAddress:{
         url : "/api/v1/address/get",
         method : "get"
-    }
+    },
+    updateAddress:{
+            url : "/api/v1/address/update",
+            method : "put"
+        },
+    disableAddress:{
+            url : "/api/v1/address/disable",
+            method : "put"
+        }
 }
 
 export default SummaryApi

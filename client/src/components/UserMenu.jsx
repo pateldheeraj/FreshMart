@@ -72,9 +72,9 @@ export const UserMenu = ({close}) => {
             <Link to="/dashboard/upload-product" className=" px-2 hover:bg-orange-200">Upload Product</Link>
          )
         }
-       
+      
         <Link to="" className=" px-2 hover:bg-orange-200">My Orders</Link>
-        <Link to="" className=" px-2 hover:bg-orange-200">Save Address</Link>
+        <Link to="/dashboard/address" className=" px-2 hover:bg-orange-200">Save Address</Link>
         <button onClick={handleLogout} className="text-left  px-2 hover:bg-orange-200">Log Out</button>
     </div>
    </div>

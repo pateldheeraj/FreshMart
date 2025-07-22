@@ -39,7 +39,40 @@ const getAddressController = asyncHandler(async (req,res) => {
     .json(new ApiResponse(200,data,"Address Fetch Successfully"))
 })
 
+const updateAddressController = asyncHandler(async (req,res)=> {
+    const userId = req.user?._id
+    const {_id,address_line,city,state,pincode,country,mobile} = req.body
+
+    const updateAddress = await AddressModel.updateOne({_id : _id, userId : userId},{
+        address_line,
+        city,
+        state,
+        pincode,
+        country,
+        mobile,
+    })
+
+    return res 
+    .status(200)
+    .json(new ApiResponse(200,updateAddress,"Address Updated Successfully"))
+})
+
+const disableAddressController = asyncHandler(async (req,res)=> {
+    const userId = req.user?._id
+    const {_id} = req.body
+
+    const disableAddress = await AddressModel.updateOne({_id : _id, userId : userId},{
+        status : false
+    })
+
+    return res 
+    .status(200)
+    .json(new ApiResponse(200,disableAddress,"Address disabled Successfully"))
+})
+
 export{
     addAddressController,
-    getAddressController
+    getAddressController,
+    updateAddressController,
+    disableAddressController
 }

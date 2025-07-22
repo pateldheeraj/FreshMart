@@ -19,6 +19,7 @@ import { ProductListPage } from "../pages/ProductListPage.jsx";
 import { DisplayProductPage } from "../pages/DisplayProductPage.jsx";
 import { CartMobile } from "../pages/CartMobile.jsx";
 import { CheckoutPage } from "../pages/CheckoutPage.jsx";
+import { Address } from "../pages/Address.jsx";
 
 const router = createBrowserRouter([
     {
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
                     {
                         path : "upload-product",
                         element : <AdminPermision> <UploadProduct/> </AdminPermision>
+                    },
+                    {
+                        path : "address",
+                        element : <AdminPermision> <Address/> </AdminPermision>
                     },
                 ]
             },
