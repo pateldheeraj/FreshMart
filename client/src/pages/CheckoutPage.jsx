@@ -1,20 +1,44 @@
 import React, { useState } from 'react'
+import {useNavigate} from 'react-router-dom'
 import { priceConverter } from '../utils/priceConverterInRupees'
 import { useGlobalContext } from '../provider/GlobalProvider'
 import { AddAddress } from '../components/AddAddress'
 import { useSelector } from 'react-redux'
+import AxiosToastError from '../utils/AxiosToastError'
+import Axios from '../utils/Axios'
+import SummaryApi from '../common/SummaryApi'
+import toast from 'react-hot-toast'
 
 export const CheckoutPage = () => {
         const { notDiscountTotalPrice, totalPrice ,totalQty} = useGlobalContext()
         const [isAddAddress,setIsAddAddress] = useState(false)
         const addressList = useSelector(state => state.addresses?.addressList)
         const [selectAddress,setSelectAddress] = useState(0)
-        
+        const cartItems = useSelector(state=>state.cartItem?.cart)
+        const navigate = useNavigate()
         const handleOnlinePayment = ()=>{
 
         }
-        const handleCashOnDelivery = ()=>{
-
+        const handleCashOnDelivery = async()=>{
+            try {
+                const response = await Axios({
+                    ...SummaryApi.cashOnDeliveryOrder,
+                    data:{
+                        list_items : cartItems,
+                        totalAmt : notDiscountTotalPrice,
+                        addressId : addressList[selectAddress]._id,
+                        subTotalAmt : totalPrice
+                    }
+                })
+                const {data : responseData} = response
+                if (responseData.success) {
+                    navigate('/success')
+                    toast.success(responseData.message)
+                }
+            } catch (error) {
+                navigate('/cancel') 
+                AxiosToastError(error)
+            }
         }
   return (
     <section className='bg-blue-50'>

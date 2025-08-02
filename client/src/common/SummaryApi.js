@@ -141,11 +141,15 @@ const SummaryApi = {
     updateAddress:{
             url : "/api/v1/address/update",
             method : "put"
-        },
+    },
     disableAddress:{
             url : "/api/v1/address/disable",
             method : "put"
-        }
+    },
+    cashOnDeliveryOrder:{
+            url : "/api/v1/order/cash-on-delivery",
+            method : "post"
+    },
 }
 
 export default SummaryApi
